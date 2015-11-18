@@ -45,6 +45,9 @@ public:
 
 private:
 
+    /** Initialize a cylinder skeleton */
+    void init_cylinder_sk(float const L, int const sample_axis);
+
     /** Draw a set of line representing a skeleton */
     void draw_skeleton(std::vector<cpe::vec3> const& positions) const;
 

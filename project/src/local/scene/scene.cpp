@@ -6,7 +6,7 @@
 #include "../../lib/opengl/glutils.hpp"
 
 #include "../../lib/perlin/perlin.hpp"
-#include "../../lib/interface/camera_matrices.hpp"
+#include "../../lib/3d/quaternion.hpp"
 
 #include "../interface/myWidgetGL.hpp"
 
@@ -63,7 +63,6 @@ static cpe::mesh_skinned build_cylinder(float const R, float const L, int const 
     //exception
     for(int j = 0;j<sample_axis-1;j++)
     {
-        std::cout<<(j+1)*sample_size-1<<" "<<(j+1)*sample_size<<" "<<(j+2)*sample_size-1<<std::endl;
         m.add_triangle_index({j*sample_size,(j+1)*sample_size-1,(j+1)*sample_size});
         m.add_triangle_index({(j+1)*sample_size-1,(j+1)*sample_size,(j+2)*sample_size-1});
     }
@@ -84,7 +83,17 @@ static cpe::mesh_skinned build_cylinder(float const R, float const L, int const 
 }
 
 
-
+void scene::init_cylinder_sk(float const L, int const sample_axis)
+{
+    for(int i = 0; i<sample_axis;i++)
+    {
+        skeleton_joint j0;
+        j0.orientation = quaternion(0,0,0,1);
+        j0.position = vec3(0,0,L*i/sample_axis);
+        sk_cylinder_bind_pose.push_back(j0);
+        sk_cylinder_parent_id.push_back(i-1);
+    }
+}
 
 
 void scene::load_scene()
@@ -108,14 +117,15 @@ void scene::load_scene()
     mesh_ground.fill_empty_field_by_default();
     mesh_ground_opengl.fill_vbo(mesh_ground);
 
-    mesh_cylinder = build_cylinder(4.0f, 50.0f ,6,12);
+    float const r_cylinder = 4.0f;
+    float const l_cylinder = 50.0f;
+    int const sample_size = 6;
+    int const sample_axis = 6;
+    mesh_cylinder = build_cylinder(r_cylinder, l_cylinder,sample_size,sample_axis);
     mesh_cylinder.fill_empty_field_by_default();
     mesh_cylinder_opengl.fill_vbo(mesh_cylinder);
 
-
-
-
-
+    init_cylinder_sk(l_cylinder, sample_axis);
 }
 
 

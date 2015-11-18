@@ -163,6 +163,27 @@ skeleton_geometry local_to_global(skeleton_geometry const& sk_local,skeleton_par
 
     //TO Do: Completez la structure sk_global en exprimant les reperes dans les coordonnees globales.
 
+    quaternion q_glob;
+    vec3 t_glob;
+
+    for(int i = 0; i< sk_local.size();i++)
+    {
+        if(parent_id[i] == -1)
+        {
+            skeleton_joint j0;
+            j0.position = sk_local[i].position;
+            j0.orientation = sk_local[i].orientation;
+            sk_global.push_back(j0);
+        }
+        else
+        {
+            skeleton_joint j_tmp;
+            j_tmp.position = sk_global[parent_id[i]].orientation * sk_local[i].position
+                    + sk_global[parent_id[i]].position;
+            j_tmp.orientation = sk_global[parent_id[i]].orientation * sk_local[i].orientation;
+            sk_global.push_back(j_tmp);
+        }
+    }
     return sk_global;
 
 
@@ -205,6 +226,7 @@ std::vector<vec3> extract_bones(skeleton_geometry const& skeleton,skeleton_paren
         int const parent = parent_id[k];
 
         //TO DO: completez la structure position avec la position des extermitees des os.
+
 
     }
 
