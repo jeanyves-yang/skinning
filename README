@@ -1,0 +1,13 @@
+Pour compiler et executer a partir du CMakeLists.txt
+
+mkdir build
+cd build
+cmake ..
+make
+cd ../project
+../build/pgm
+
+- Note sur l'utilisation des IDE (QtCreator, etc).
+
+Le repertoire d'execution doit etre dans project/
+C'est a dire que le repertoire data/ doit etre accessible.
